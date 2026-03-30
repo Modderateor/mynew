@@ -1,0 +1,480 @@
+-- Script ini harus dijalankan di executor seperti Synapse, KRNL, Script-Ware
+-- Link Discord: https://discord.gg/d3NSzcpRZ5
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+local CyrusUI = Instance.new("ScreenGui")
+CyrusUI.Name = "CyrusHubUI"
+CyrusUI.ZIndexBehavior = Enum.ZIndexBehavior.Global
+CyrusUI.ResetOnSpawn = false
+
+if syn and syn.protect_gui then
+    syn.protect_gui(CyrusUI)
+    CyrusUI.Parent = game:GetService("CoreGui")
+elseif gethui then
+    CyrusUI.Parent = gethui()
+else
+    CyrusUI.Parent = game:GetService("CoreGui")
+end
+
+local BlurEffect = Instance.new("BlurEffect")
+BlurEffect.Size = 0
+BlurEffect.Parent = game:GetService("Lighting")
+
+local MainContainer = Instance.new("Frame")
+MainContainer.Name = "MainContainer"
+MainContainer.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+MainContainer.BackgroundTransparency = 1
+MainContainer.BorderSizePixel = 0
+MainContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainContainer.Size = UDim2.new(0, 0, 0, 0)
+MainContainer.AnchorPoint = Vector2.new(0.5, 0.5)
+MainContainer.Parent = CyrusUI
+
+local ContainerCorner = Instance.new("UICorner")
+ContainerCorner.CornerRadius = UDim.new(0, 15)
+ContainerCorner.Parent = MainContainer
+
+local ContainerStroke = Instance.new("UIStroke")
+ContainerStroke.Color = Color3.fromRGB(100, 70, 200)
+ContainerStroke.Thickness = 2
+ContainerStroke.Transparency = 0
+ContainerStroke.Parent = MainContainer
+
+local ContainerShadow = Instance.new("ImageLabel")
+ContainerShadow.Name = "ContainerShadow"
+ContainerShadow.BackgroundTransparency = 1
+ContainerShadow.Image = "rbxassetid://5554236805"
+ContainerShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+ContainerShadow.ImageTransparency = 0.8
+ContainerShadow.ScaleType = Enum.ScaleType.Slice
+ContainerShadow.SliceCenter = Rect.new(23, 23, 277, 277)
+ContainerShadow.Size = UDim2.new(1, 50, 1, 50)
+ContainerShadow.Position = UDim2.new(0, -25, 0, -25)
+ContainerShadow.ZIndex = -1
+ContainerShadow.Parent = MainContainer
+
+local Header = Instance.new("Frame")
+Header.Name = "Header"
+Header.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
+Header.Size = UDim2.new(1, 0, 0, 80)
+Header.BorderSizePixel = 0
+Header.Parent = MainContainer
+
+local HeaderCorner = Instance.new("UICorner")
+HeaderCorner.CornerRadius = UDim.new(0, 15)
+HeaderCorner.Parent = Header
+
+local HeaderGradient = Instance.new("UIGradient")
+HeaderGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(140, 80, 220)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(100, 120, 240)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(140, 80, 220))
+})
+HeaderGradient.Rotation = -30
+HeaderGradient.Parent = Header
+
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0.05, 0, 0, 0)
+Title.Size = UDim2.new(0.7, 0, 1, 0)
+Title.Font = Enum.Font.GothamBlack
+Title.Text = "CYRUS HUB"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 32
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.TextStrokeTransparency = 0.8
+Title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+Title.Parent = Header
+
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Name = "StatusLabel"
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Position = UDim2.new(0.05, 0, 0.8, 0)
+StatusLabel.Size = UDim2.new(0.7, 0, 0, 30)
+StatusLabel.Font = Enum.Font.GothamBold
+StatusLabel.Text = "SCRIPT DOWN | JOIN DISCORD FOR UPDATE"
+StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+StatusLabel.TextSize = 14
+StatusLabel.TextXAlignment = Enum.TextXAlignment.Left
+StatusLabel.Parent = Header
+
+local CloseButton = Instance.new("ImageButton")
+CloseButton.Name = "CloseButton"
+CloseButton.AnchorPoint = Vector2.new(1, 0.5)
+CloseButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+CloseButton.BackgroundTransparency = 1
+CloseButton.Position = UDim2.new(0.95, 0, 0.5, 0)
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Image = "rbxassetid://3926305904"
+CloseButton.ImageRectOffset = Vector2.new(924, 724)
+CloseButton.ImageRectSize = Vector2.new(36, 36)
+CloseButton.Parent = Header
+
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(1, 0)
+CloseCorner.Parent = CloseButton
+
+local Content = Instance.new("Frame")
+Content.Name = "Content"
+Content.BackgroundTransparency = 1
+Content.Position = UDim2.new(0, 0, 0, 90)
+Content.Size = UDim2.new(1, 0, 1, -90)
+Content.Parent = MainContainer
+
+local DiscordButton = Instance.new("TextButton")
+DiscordButton.Name = "DiscordButton"
+DiscordButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+DiscordButton.Position = UDim2.new(0.1, 0, 0.1, 0)
+DiscordButton.Size = UDim2.new(0.8, 0, 0, 60)
+DiscordButton.Font = Enum.Font.GothamBlack
+DiscordButton.Text = "JOIN DISCORD"
+DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordButton.TextSize = 20
+DiscordButton.TextWrapped = true
+DiscordButton.AutoButtonColor = false
+DiscordButton.Parent = Content
+
+local DiscordCorner = Instance.new("UICorner")
+DiscordCorner.CornerRadius = UDim.new(0, 10)
+DiscordCorner.Parent = DiscordButton
+
+local DiscordStroke = Instance.new("UIStroke")
+DiscordStroke.Color = Color3.fromRGB(255, 255, 255)
+DiscordStroke.Thickness = 2
+DiscordStroke.Transparency = 0.5
+DiscordStroke.Parent = DiscordButton
+
+local DiscordIcon = Instance.new("ImageLabel")
+DiscordIcon.Name = "DiscordIcon"
+DiscordIcon.AnchorPoint = Vector2.new(0, 0.5)
+DiscordIcon.BackgroundTransparency = 1
+DiscordIcon.Position = UDim2.new(0.05, 0, 0.5, 0)
+DiscordIcon.Size = UDim2.new(0, 35, 0, 35)
+DiscordIcon.Image = "rbxassetid://9753762463"
+DiscordIcon.Parent = DiscordButton
+
+local InfoBox = Instance.new("Frame")
+InfoBox.Name = "InfoBox"
+InfoBox.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+InfoBox.Position = UDim2.new(0.1, 0, 0.3, 0)
+InfoBox.Size = UDim2.new(0.8, 0, 0, 120)
+InfoBox.Parent = Content
+
+local InfoCorner = Instance.new("UICorner")
+InfoCorner.CornerRadius = UDim.new(0, 10)
+InfoCorner.Parent = InfoBox
+
+local InfoStroke = Instance.new("UIStroke")
+InfoStroke.Color = Color3.fromRGB(100, 70, 200)
+InfoStroke.Thickness = 1
+InfoStroke.Parent = InfoBox
+
+local StatusInfo = Instance.new("TextLabel")
+StatusInfo.Name = "StatusInfo"
+StatusInfo.BackgroundTransparency = 1
+StatusInfo.Position = UDim2.new(0.05, 0, 0.1, 0)
+StatusInfo.Size = UDim2.new(0.9, 0, 0, 25)
+StatusInfo.Font = Enum.Font.GothamBold
+StatusInfo.Text = "🔴 STATUS: HUB IS CURRENTLY DOWN"
+StatusInfo.TextColor3 = Color3.fromRGB(255, 150, 100)
+StatusInfo.TextSize = 16
+StatusInfo.TextXAlignment = Enum.TextXAlignment.Left
+StatusInfo.Parent = InfoBox
+
+local SupportInfo = Instance.new("TextLabel")
+SupportInfo.Name = "SupportInfo"
+SupportInfo.BackgroundTransparency = 1
+SupportInfo.Position = UDim2.new(0.05, 0, 0.4, 0)
+SupportInfo.Size = UDim2.new(0.9, 0, 0, 25)
+SupportInfo.Font = Enum.Font.GothamBold
+SupportInfo.Text = "📱 SUPPORT: MOBILE & PC | ALL EXECUTORS"
+SupportInfo.TextColor3 = Color3.fromRGB(150, 255, 150)
+SupportInfo.TextSize = 14
+SupportInfo.TextXAlignment = Enum.TextXAlignment.Left
+SupportInfo.Parent = InfoBox
+
+local VersionInfo = Instance.new("TextLabel")
+VersionInfo.Name = "VersionInfo"
+VersionInfo.BackgroundTransparency = 1
+VersionInfo.Position = UDim2.new(0.05, 0, 0.7, 0)
+VersionInfo.Size = UDim2.new(0.9, 0, 0, 20)
+VersionInfo.Font = Enum.Font.Gotham
+VersionInfo.Text = "⚡ VERSION: ALL | NEXT UPDATE: SOON"
+VersionInfo.TextColor3 = Color3.fromRGB(180, 180, 255)
+VersionInfo.TextSize = 12
+VersionInfo.TextXAlignment = Enum.TextXAlignment.Left
+VersionInfo.Parent = InfoBox
+
+local ParticlesContainer = Instance.new("Frame")
+ParticlesContainer.Name = "ParticlesContainer"
+ParticlesContainer.BackgroundTransparency = 1
+ParticlesContainer.Size = UDim2.new(1, 0, 1, 0)
+ParticlesContainer.Parent = MainContainer
+
+local function CreateParticle()
+    local particle = Instance.new("Frame")
+    particle.BackgroundColor3 = Color3.fromRGB(100, 70, 200)
+    particle.BorderSizePixel = 0
+    particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
+    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    particle.ZIndex = -1
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = particle
+    
+    particle.Parent = ParticlesContainer
+    
+    task.spawn(function()
+        while particle and particle.Parent do
+            TweenService:Create(particle, TweenInfo.new(1.5), {
+                Position = UDim2.new(math.random(), 0, math.random(), 0),
+                BackgroundTransparency = math.random(0, 70) / 100
+            }):Play()
+            task.wait(1.5)
+        end
+    end)
+end
+
+for i = 1, 15 do
+    task.spawn(CreateParticle)
+end
+
+local function ShowNotification()
+    local notification = Instance.new("Frame")
+    notification.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+    notification.BorderSizePixel = 0
+    notification.Position = UDim2.new(0.5, 0, 0.2, 0)
+    notification.Size = UDim2.new(0, 300, 0, 0)
+    notification.AnchorPoint = Vector2.new(0.5, 0.5)
+    notification.ZIndex = 100
+    notification.ClipsDescendants = true
+    notification.Parent = CyrusUI
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = notification
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(100, 70, 200)
+    stroke.Thickness = 2
+    stroke.Parent = notification
+
+    local title = Instance.new("TextLabel")
+    title.BackgroundTransparency = 1
+    title.Position = UDim2.new(0, 15, 0, 10)
+    title.Size = UDim2.new(1, -30, 0, 25)
+    title.Font = Enum.Font.GothamBold
+    title.Text = "CYRUS HUB"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 18
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.ZIndex = 101
+    title.Parent = notification
+
+    local message = Instance.new("TextLabel")
+    message.BackgroundTransparency = 1
+    message.Position = UDim2.new(0, 15, 0, 40)
+    message.Size = UDim2.new(1, -30, 0, 40)
+    message.Font = Enum.Font.Gotham
+    message.Text = "Script is down! Join Discord for updates."
+    message.TextColor3 = Color3.fromRGB(220, 220, 220)
+    message.TextSize = 14
+    message.TextWrapped = true
+    message.TextXAlignment = Enum.TextXAlignment.Left
+    message.ZIndex = 101
+    message.Parent = notification
+
+    -- Open animation
+    TweenService:Create(
+        notification,
+        TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        { Size = UDim2.new(0, 300, 0, 90) }
+    ):Play()
+
+    task.wait(3)
+
+    -- Close animation
+    TweenService:Create(
+        notification,
+        TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+        { Size = UDim2.new(0, 300, 0, 0) }
+    ):Play()
+
+    task.wait(0.4)
+    notification:Destroy()
+end
+
+local function OpenUI()
+    TweenService:Create(BlurEffect, TweenInfo.new(0.5), {Size = 10}):Play()
+    
+    TweenService:Create(MainContainer, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 0,
+        Size = UDim2.new(0, 450, 0, 350)
+    }):Play()
+    
+    task.wait(0.5)
+    
+    StatusLabel.TextTransparency = 1
+    StatusLabel.Visible = true
+    
+    for i = 1, 10 do
+        StatusLabel.TextTransparency = StatusLabel.TextTransparency - 0.1
+        task.wait(0.05)
+    end
+end
+
+local function CloseUI()
+    TweenService:Create(StatusLabel, TweenInfo.new(0.2), {
+        TextTransparency = 1
+    }):Play()
+    
+    task.wait(0.2)
+    
+    TweenService:Create(MainContainer, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+        Size = UDim2.new(0, 0, 0, 0),
+        BackgroundTransparency = 1
+    }):Play()
+    
+    TweenService:Create(BlurEffect, TweenInfo.new(0.5), {Size = 0}):Play()
+    
+    task.wait(0.5)
+    CyrusUI:Destroy()
+    BlurEffect:Destroy()
+end
+
+DiscordButton.MouseButton1Click:Connect(function()
+    local originalText = DiscordButton.Text
+    local originalColor = DiscordButton.BackgroundColor3
+    
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {
+        BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+    }):Play()
+    
+    DiscordButton.Text = "COPYING..."
+    
+    local discordLink = "https://discord.gg/d3NSzcpRZ5"
+    
+    local success = pcall(function()
+        if setclipboard then
+            setclipboard(discordLink)
+        elseif writeclipboard then
+            writeclipboard(discordLink)
+        elseif toclipboard then
+            toclipboard(discordLink)
+        end
+    end)
+    
+    if success then
+        DiscordButton.Text = "LINK COPIED!"
+        
+        task.spawn(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "CYRUS HUB",
+                Text = "Discord link copied to clipboard!",
+                Icon = "rbxassetid://9753762463",
+                Duration = 3
+            })
+        end)
+    else
+        DiscordButton.Text = "OPEN IN BROWSER"
+        
+        local httpSuccess, httpResult = pcall(function()
+            return game:HttpGetAsync("http://localhost:6463/rpc?v=1", true)
+        end)
+        
+        if not httpSuccess then
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "CYRUS HUB",
+                Text = "Join: discord.gg/d3NSzcpRZ5",
+                Duration = 5
+            })
+        end
+    end
+    
+    task.wait(1.5)
+    
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {
+        BackgroundColor3 = originalColor
+    }):Play()
+    
+    DiscordButton.Text = originalText
+end)
+
+DiscordButton.MouseEnter:Connect(function()
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {
+        Size = UDim2.new(0.82, 0, 0, 65)
+    }):Play()
+end)
+
+DiscordButton.MouseLeave:Connect(function()
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {
+        Size = UDim2.new(0.8, 0, 0, 60)
+    }):Play()
+end)
+
+CloseButton.MouseButton1Click:Connect(CloseUI)
+CloseButton.MouseEnter:Connect(function()
+    TweenService:Create(CloseButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.7
+    }):Play()
+end)
+CloseButton.MouseLeave:Connect(function()
+    TweenService:Create(CloseButton, TweenInfo.new(0.2), {
+        BackgroundTransparency = 1
+    }):Play()
+end)
+
+local dragging = false
+local dragStart = Vector2.new(0, 0)
+local startPosition = Vector2.new(0, 0)
+
+Header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = Vector2.new(input.Position.X, input.Position.Y)
+        startPosition = Vector2.new(MainContainer.Position.X.Offset, MainContainer.Position.Y.Offset)
+    end
+end)
+
+Header.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = Vector2.new(input.Position.X, input.Position.Y) - dragStart
+        MainContainer.Position = UDim2.new(0, startPosition.X + delta.X, 0, startPosition.Y + delta.Y)
+    end
+end)
+
+Header.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+OpenUI()
+task.wait(0.7)
+ShowNotification()
+
+local pulseConnection
+pulseConnection = RunService.Heartbeat:Connect(function()
+    local time = tick()
+    local pulse = math.sin(time * 2) * 0.1 + 0.9
+    Title.TextTransparency = 1 - pulse
+    
+    local colorPulse = math.sin(time * 3) * 0.2 + 0.8
+    local r = math.floor(100 * colorPulse + 70)
+    local g = math.floor(70 * colorPulse + 30)
+    local b = math.floor(200 * colorPulse + 100)
+    ContainerStroke.Color = Color3.fromRGB(r, g, b)
+end)
+
+if UserInputService.TouchEnabled then
+    MainContainer.Size = UDim2.new(0, 400, 0, 350)
+end
